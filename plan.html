@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>window.jsPDF = window.jspdf.jsPDF;</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Plan Generator - StudyFlow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #edf2f4;
+      color: #344e41;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark-theme {
+      background-color: #0b132b;
+      color: #fff;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background-color: #344e41;
+      color: #edf2f4;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    body.dark-theme .navbar {
+      background-color: #1c2541;
+      color: #fff;
+    }
+
+    .navbar .logo {
+      color: #edf2f4;
+      font-weight: 600;
+      font-size: 1.2rem;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: #edf2f4;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #8d99ae;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 5px 20px rgba(52, 78, 65, 0.08);
+      padding: 40px 30px;
+    }
+    body.dark-theme .container {
+      background: #3a506b;
+      color: #fff;
+      border: 1px solid #1c2541;
+    }
+
+    h1, h2, h3 {
+      color: #344e41;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 35px;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+      padding-bottom: 10px;
+      color: #344e41; /* Default color for light theme */
+    }
+    body.dark-theme h1 {
+      color: #fff; /* White color for dark theme */
+    }
+
+    h1::after {
+      content: '';
+      display: block;
+      width: 60%;
+      height: 3px;
+      background: linear-gradient(to right, #344e41, #8d99ae);
+      border-radius: 10px;
+      margin: 0 auto;
+      margin-top: 8px;
+    }
+
+    label {
+      color: #344e41;
+      font-weight: 500;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #8d99ae;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      margin-bottom: 20px;
+      background: #edf2f4;
+      color: #344e41;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #344e41;
+      background: #fff;
+    }
+
+    button, .btn {
+      background: linear-gradient(to right, #344e41, #8d99ae);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    button:hover, .btn:hover {
+      background: #344e41;
+      color: #edf2f4;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(52, 78, 65, 0.12);
+    }
+
+    .plan-section {
+      margin-bottom: 40px;
+    }
+
+    .plan-list {
+      margin-top: 30px;
+      background: #edf2f4;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 2px 8px rgba(52, 78, 65, 0.05);
+    }
+    body.dark-theme .plan-list {
+      background: #1c2541;
+    }
+
+    .plan-list h3 {
+      color: #344e41;
+      margin-bottom: 15px;
+    }
+
+    .plan-item {
+      background: #fff;
+      border-left: 5px solid #8d99ae;
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(52, 78, 65, 0.04);
+      transition: box-shadow 0.3s;
+    }
+    body.dark-theme .plan-item {
+      background: #3a506b;
+      color: #fff;
+      border-left: 5px solid #0b132b;
+    }
+
+    .plan-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .plan-item:hover {
+      box-shadow: 0 6px 18px rgba(52, 78, 65, 0.10);
+    }
+
+    .plan-item-title {
+      font-weight: 600;
+      color: #344e41;
+      margin-bottom: 6px;
+    }
+
+    .plan-item-desc {
+      color: #8d99ae;
+      font-size: 0.98em;
+    }
+
+    .success-message, .error-message {
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      display: inline-block;
+    }
+    .success-message {
+      background: #d8f3dc;
+      color: #344e41;
+      border: 1px solid #b7e4c7;
+    }
+    body.dark-theme .success-message {
+      background: #1c2541;
+      color: #fff;
+      border: 1px solid #3a506b;
+    }
+    .error-message {
+      background: #ffe5e5;
+      color: #e63946;
+      border: 1px solid #ffb3b3;
+    }
+    body.dark-theme .error-message {
+      background: #3a506b;
+      color: #fff;
+      border: 1px solid #e63946;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        padding: 25px 10px;
+      }
+    }
+    @media (max-width: 600px) {
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px 10px;
+      }
+      .container {
+        padding: 15px 2vw;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+  <script>
+    // If not logged in, redirect to login page
+    if (!localStorage.getItem('username')) {
+      window.location.replace('index.html');
+    }
+    // Prevent session hijacking: if storage is cleared, force redirect on reload
+    window.addEventListener('pageshow', function(event) {
+      if (!localStorage.getItem('username')) {
+        window.location.replace('index.html');
+      }
+    });
+  </script>
+  <script>
+    // Prevent back navigation to protected pages after logout
+    if (window.history && window.history.pushState) {
+      window.history.pushState(null, null, window.location.href);
+      window.onpopstate = function () {
+        window.history.go(1);
+      };
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Navbar (matching dashboard.html style) -->
+  <nav class="navbar">
+    <a href="home.html" class="logo" style="text-decoration:none;cursor:pointer;">StudyFlow</a>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="plan.html" style="font-weight:600;">Study Plan</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="history.html">History</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" class="menu-item" onclick="logout(); return false;">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>📅 Study Plan Generator</h1>
+    <form id="plan-form">
+      <label>Your Learning Style:</label>
+      <input type="text" id="learningStyle" readonly>
+      <label>Subjects (comma separated):</label>
+      <input type="text" id="subjects" placeholder="e.g. Math, English, DSA">
+      <label>Topic:</label>
+      <input type="text" id="topic" placeholder="e.g. Algebra, Grammar">
+      <label>Grade/Level:</label>
+      <input type="text" id="grade" placeholder="e.g. 10th grade, Undergraduate">
+      <label>Daily Study Duration:</label>
+      <input type="text" id="duration" placeholder="e.g. 2 hours">
+      <label>Learning Objectives:</label>
+      <textarea id="objectives" placeholder="e.g. Master linear equations, improve writing skills"></textarea>  
+      <button type="submit" id="generate-btn">Generate Study Plan</button>   
+    </form>
+
+    <div class="plan-section">
+      <div class="plan" id="plan-output">
+        <div id="pdf-content" style="background: #fff; color: #000; padding: 30px; border-radius: 10px; font-size: 14px; display: none;"></div>
+      </div>
+
+      <div style="text-align:center; margin-top: 20px;">
+        <a href="history.html" id="go-to-archives" style="display:inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; font-family: 'Poppins', sans-serif; font-size: 1rem;">Go to Plan Archives</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include Marked.js for Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Auto-fill the learning style field from localStorage
+      document.getElementById('learningStyle').value = localStorage.getItem("learningStyle") || "Not set";
+  
+      // Theme logic: Set dark or light theme based on localStorage
+      const theme = localStorage.getItem('theme') || 'light';
+      if (theme === 'dark') document.body.classList.add('dark-theme');
+  
+      // Handle form submission for generating a study plan
+      document.getElementById('plan-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+  
+        // Get form values
+        const learningStyle = document.getElementById('learningStyle').value;
+        const subjects = document.getElementById('subjects').value.trim();
+        const topic = document.getElementById('topic').value.trim();
+        const grade = document.getElementById('grade').value;
+        const duration = document.getElementById('duration').value;
+        const objectives = document.getElementById('objectives').value;
+  
+        // Validate all fields
+        if (!subjects || !topic || !grade || !duration || !objectives) {
+          alert("Please fill all fields.");
+          return;
+        }
+  
+        const email = localStorage.getItem("email");
+  
+        try {
+          // Send request to backend to generate plan
+          const response = await fetch('http://localhost:5000/api/generate-plan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              subject: subjects,
+              topic: topic,
+              grade: grade,
+              duration: duration,
+              objectives: objectives,
+              customization: `Learning Style: ${learningStyle}`
+            })
+          });
+  
+          const data = await response.json();
+  
+          if (data.plan_md) {
+            // If plan generated, display it
+            const planText = data.plan_md;
+            const cleaned = marked.parse(planText);
+  
+            document.getElementById('plan-output').innerHTML = `
+              <h3>Your AI-Generated Study Plan:</h3>
+              <div id="plan-text" style="line-height: 1.8; background:#fff; color:#000; padding:20px; border-radius:10px;">
+                ${cleaned.trim()}
+              </div>
+            `;
+  
+            // ✅ Ask if user wants to save to history
+            const confirmSave = confirm("Do you want to save this plan to your history?");
+            if (confirmSave) {
+              await fetch('http://localhost:5000/api/save-history', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  email,
+                  subject: subjects,
+                  topic: topic,
+                  plan_md: planText
+                })
+              });
+            }
+  
+            // ✅ Show download button
+            // document.getElementById('download-pdf').style.display = "inline-block";
+          } else {
+            // Show error if plan generation failed
+            document.getElementById('plan-output').innerText = "❌ Failed to generate plan. Try again.";
+          }
+  
+        } catch (err) {
+          // Show error if server error
+          console.error('Error:', err);
+          document.getElementById('plan-output').innerText = "❌ Server error. Please try later.";
+        }
+      });
+  
+      // Download plan as PDF using html2pdf
+      // document.getElementById('download-pdf').addEventListener('click', () => {
+      //   const element = document.getElementById('plan-text');
+      //   if (!element || !element.innerHTML.trim()) {
+      //     alert("No plan to download.");
+      //     return;
+      //   }
+  
+      //   html2pdf().set({
+      //     margin: 10,
+      //     filename: 'StudyFlow_Plan.pdf',
+      //     html2canvas: { scale: 2 },
+      //     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      //   }).from(element).save();
+      // });
+    });
+
+    // Logout function: clears storage and redirects to index.html, prevents back navigation
+    function logout() {
+      localStorage.clear();
+      sessionStorage && sessionStorage.clear();
+      window.location.replace('index.html');
+    }
+  </script>
+  
+  
+    
+
+</body>
+</html>

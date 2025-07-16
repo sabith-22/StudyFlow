@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Design - StudyFlow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background-color: #edf2f4; color: #344e41; overflow-x: hidden; }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background-color: #344e41;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar .logo {
+      color: #edf2f4;
+      font-weight: 600;
+      font-size: 1.2rem;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: #edf2f4;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #8d99ae;
+    }
+
+    .login-btn {
+      background-color: transparent;
+      color: #edf2f4;
+      border: 2px solid #8d99ae;
+      padding: 8px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .login-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 100%;
+      background-color: #8d99ae;
+      transition: all 0.3s ease;
+      z-index: -1;
+    }
+
+    .login-btn:hover::before {
+      width: 100%;
+    }
+
+    .login-btn:hover {
+      color: #344e41;
+    }
+
+    .hero {
+      padding: 80px 20px;
+      text-align: center;
+      background: linear-gradient(to right, #344e41, #8d99ae);
+      color: #edf2f4;
+    }
+    
+    .hero h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    
+    .hero p {
+      font-size: 1.1em;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .back-btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #edf2f4;
+      color: #344e41;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .back-btn:hover {
+      background-color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .content {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .content h2 {
+      color: #344e41;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 10px;
+    }
+    
+    .content h2::after {
+      content: '';
+      position: absolute;
+      width: 60%;
+      height: 3px;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(to right, #344e41, #8d99ae);
+      border-radius: 10px;
+    }
+    
+    .content p {
+      margin-bottom: 20px;
+      line-height: 1.8;
+      color: #555;
+    }
+    
+    .feature-benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+    
+    .benefit-card {
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .benefit-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .benefit-card h3 {
+      color: #344e41;
+      margin-bottom: 15px;
+    }
+    
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    
+    .device-showcase {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    
+    .device {
+      position: relative;
+      width: 300px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .device:hover {
+      transform: translateY(-10px);
+    }
+    
+    .device img {
+      width: 100%;
+      display: block;
+    }
+    
+    .device-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px;
+      background: rgba(52, 78, 65, 0.8);
+      color: white;
+      text-align: center;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1s ease forwards;
+    }
+    
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    footer {
+      padding: 30px;
+      background-color: #344e41;
+      text-align: center;
+      color: #edf2f4;
+      font-size: 0.9em;
+      margin-top: 60px;
+    }
+    
+    footer a {
+      color: #8d99ae;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    footer a:hover {
+      color: #edf2f4;
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 15px 20px;
+      }
+      
+      .nav-links {
+        gap: 15px;
+      }
+      
+      .login-btn {
+        padding: 6px 15px;
+        font-size: 0.9rem;
+      }
+      
+      .hero h1 {
+        font-size: 2em;
+      }
+      
+      .device {
+        width: 250px;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .navbar {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .nav-links {
+        margin: 10px 0;
+      }
+      
+      .device {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../home.html" class="logo">StudyFlow</a>
+    <div class="nav-links">
+      <a href="../home.html#features">Features</a>
+      <a href="../home.html#future">Future</a>
+      <a href="../home.html#about">About</a>
+    </div>
+    <button class="login-btn" onclick="location.href='../index.html'">Login</button>
+  </nav>
+
+  <section class="hero">
+    <h1 class="fade-up">Responsive Design</h1>
+    <p class="fade-up">Access StudyFlow on any device with our fully responsive and user-friendly interface</p>
+    <a href="../home.html#features" class="back-btn fade-up">Back to Features</a>
+  </section>
+
+  <section class="content">
+    <h2>Study Anywhere, Anytime</h2>
+    <p>StudyFlow's responsive design ensures a seamless experience across all devices, from desktop computers to tablets and smartphones. Our adaptive interface automatically adjusts to your screen size, providing optimal usability no matter how you choose to access the platform.</p>
+    
+    <p>This flexibility allows you to seamlessly transition between devices throughout your day, checking your study schedule on your phone during a commute, completing assignments on a tablet, or doing in-depth planning on a desktop.</p>
+    
+    <div class="device-showcase">
+      <div class="device fade-up">
+        <img src="https://via.placeholder.com/300x600/f5f5f5/333333?text=Mobile+View" alt="Mobile view of StudyFlow">
+        <div class="device-label">Mobile</div>
+      </div>
+      <div class="device fade-up">
+        <img src="https://via.placeholder.com/500x400/f5f5f5/333333?text=Tablet+View" alt="Tablet view of StudyFlow">
+        <div class="device-label">Tablet</div>
+      </div>
+      <div class="device fade-up">
+        <img src="https://via.placeholder.com/600x400/f5f5f5/333333?text=Desktop+View" alt="Desktop view of StudyFlow">
+        <div class="device-label">Desktop</div>
+      </div>
+    </div>
+    
+    <h2>Responsive Features</h2>
+    <div class="feature-benefits">
+      <div class="benefit-card fade-up">
+        <span class="feature-icon">🔄</span>
+        <h3>Adaptive Interface</h3>
+        <p>Elements that intelligently resize and reorganize to provide the best experience on any screen.</p>
+      </div>
+      
+      <div class="benefit-card fade-up">
+        <span class="feature-icon">⚡</span>
+        <h3>Fast Loading</h3>
+        <p>Optimized performance across all devices with efficient resource loading and minimal data usage.</p>
+      </div>
+      
+      <div class="benefit-card fade-up">
+        <span class="feature-icon">👆</span>
+        <h3>Touch-Friendly Controls</h3>
+        <p>Intuitive touch interfaces with appropriately sized buttons and interactive elements on mobile devices.</p>
+      </div>
+      
+      <div class="benefit-card fade-up">
+        <span class="feature-icon">🔄</span>
+        <h3>Synchronized Experience</h3>
+        <p>Real-time data synchronization ensures your study plan is always up-to-date across all devices.</p>
+      </div>
+    </div>
+    <br>
+    <h2>Benefits of Multi-Device Access</h2>
+    <p>Having StudyFlow available on all your devices offers significant advantages:</p>
+    <ul style="margin-left: 20px; line-height: 1.8; margin-bottom: 30px;">
+      <li>Maximize productive time by accessing your study plans during short breaks</li>
+      <li>Quick reference to your schedule without needing to be at your desk</li>
+      <li>Set and receive notifications on the device you're currently using</li>
+      <li>Use the most comfortable device for different types of study activities</li>
+      <li>Share your screen or collaborate with study partners regardless of their device</li>
+    </ul>
+    
+    <p>StudyFlow's responsive design ensures that your study planning and progress tracking integrate seamlessly into your daily life, making consistent learning easier than ever.</p>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 StudyFlow. All rights reserved.</p>
+      <p>Contact us at: <a href="mailto:info@studyflow.com">info@studyflow.com</a></p>
+    </div>
+  </footer>
+</body>
+</html> 

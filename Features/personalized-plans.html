@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personalized Study Plans - StudyFlow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background-color: #edf2f4; color: #344e41; overflow-x: hidden; }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background-color: #344e41;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar .logo {
+      color: #edf2f4;
+      font-weight: 600;
+      font-size: 1.2rem;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: #edf2f4;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #8d99ae;
+    }
+
+    .login-btn {
+      background-color: transparent;
+      color: #edf2f4;
+      border: 2px solid #8d99ae;
+      padding: 8px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .login-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 100%;
+      background-color: #8d99ae;
+      transition: all 0.3s ease;
+      z-index: -1;
+    }
+
+    .login-btn:hover::before {
+      width: 100%;
+    }
+
+    .login-btn:hover {
+      color: #344e41;
+    }
+
+    .hero {
+      padding: 80px 20px;
+      text-align: center;
+      background: linear-gradient(to right, #344e41, #8d99ae);
+      color: #edf2f4;
+    }
+    
+    .hero h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    
+    .hero p {
+      font-size: 1.1em;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .back-btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #edf2f4;
+      color: #344e41;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .back-btn:hover {
+      background-color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .content {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .content h2 {
+      color: #344e41;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 10px;
+    }
+    
+    .content h2::after {
+      content: '';
+      position: absolute;
+      width: 60%;
+      height: 3px;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(to right, #344e41, #8d99ae);
+      border-radius: 10px;
+    }
+    
+    .content p {
+      margin-bottom: 20px;
+      line-height: 1.8;
+      color: #555;
+    }
+    
+    .feature-benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+    
+    .benefit-card {
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .benefit-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .benefit-card h3 {
+      color: #344e41;
+      margin-bottom: 15px;
+    }
+    
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1s ease forwards;
+    }
+    
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    footer {
+      padding: 30px;
+      background-color: #344e41;
+      text-align: center;
+      color: #edf2f4;
+      font-size: 0.9em;
+      margin-top: 60px;
+    }
+    
+    footer a {
+      color: #8d99ae;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    footer a:hover {
+      color: #edf2f4;
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 15px 20px;
+      }
+      
+      .nav-links {
+        gap: 15px;
+      }
+      
+      .login-btn {
+        padding: 6px 15px;
+        font-size: 0.9rem;
+      }
+      
+      .hero h1 {
+        font-size: 2em;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .navbar {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .nav-links {
+        margin: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../home.html" class="logo">StudyFlow</a>
+    <div class="nav-links">
+      <a href="../home.html#features">Features</a>
+      <a href="../home.html#future">Future</a>
+      <a href="../home.html#about">About</a>
+    </div>
+    <button class="login-btn" onclick="location.href='../index.html'">Login</button>
+  </nav>
+
+  <section class="hero">
+    <h1 class="fade-up">Personalized Study Plans</h1>
+    <p class="fade-up">AI-generated schedules tailored to your learning style and goals</p>
+    <a href="../home.html#features" class="back-btn fade-up">Back to Features</a>
+  </section>
+
+  <section class="content">
+    <h2>How It Works</h2>
+    <p>StudyFlow's personalized study plan feature uses advanced algorithms to create customized study schedules that align with your unique learning preferences, goals, and available time. By analyzing your learning style, subject priorities, and past performance patterns, our AI generates optimized plans that maximize your learning efficiency.</p>
+    
+    <p>Our system takes into account your daily schedule, energy levels during different times of day, and the complexity of topics to create a balanced study plan that prevents burnout while ensuring consistent progress.</p>
+    
+    <h2>Key Benefits</h2>
+    <div class="feature-benefits">
+      <div class="benefit-card fade-up">
+        <span class="feature-icon">⏱️</span>
+        <h3>Time Optimization</h3>
+        <p>Study plans that make the most of your available time, focusing on high-priority subjects when you're most productive.</p>
+      </div>
+      
+      <div class="benefit-card fade-up">
+        <span class="feature-icon">🧩</span>
+        <h3>Learning Style Adaptation</h3>
+        <p>Content delivery methods that match your VARK (Visual, Auditory, Reading/Writing, Kinesthetic) learning preferences.</p>
+      </div>
+      
+      <div class="benefit-card fade-up">
+        <span class="feature-icon">🔄</span>
+        <h3>Dynamic Adjustments</h3>
+        <p>Schedules that adapt based on your progress and feedback, increasing difficulty as you improve.</p>
+      </div>
+      
+      <div class="benefit-card fade-up">
+        <span class="feature-icon">🏆</span>
+        <h3>Goal Alignment</h3>
+        <p>Study plans structured around your specific academic goals and deadlines.</p>
+      </div>
+    </div>
+    <br>
+    <h2>How To Use</h2>
+    <p>Getting started with personalized study plans is simple:</p>
+    <ol style="margin-left: 20px; line-height: 1.8; margin-bottom: 30px;">
+      <li>Complete the learning style assessment to identify your VARK preferences</li>
+      <li>Input your academic goals, subjects, and deadlines</li>
+      <li>Set your available study hours and preferred times</li>
+      <li>Review and start following your AI-generated plan</li>
+      <li>Provide feedback on your progress to help the system refine your plan</li>
+    </ol>
+    
+    <p>As you continue to use StudyFlow, the AI will learn from your study patterns and results, making increasingly precise adjustments to optimize your learning experience.</p>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 StudyPlanner. All rights reserved.</p>
+      <p>Contact us at: <a href="mailto:info@studyplanner.com">info@studyplanner.com</a></p>
+    </div>
+  </footer>
+</body>
+</html> 
