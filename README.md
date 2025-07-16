@@ -72,9 +72,6 @@ bash
 Copy
 Edit
 node server.js
- Live Demo
-Visit the Live App
-(Replace this with your deployed link if available)
 
 Screenshots
 
